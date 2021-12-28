@@ -76,6 +76,10 @@ elif [ "$GIT_BRANCH" = "master" ]; then
   pushTag "master-${BUILD_NUM}-${GIT_SHA1_SHORT}"
   pushTag "master-latest"
 
+elif [[ "$GIT_BRANCH" = "fix-issues-4931" ]]; then
+  # sanitize the branch name since docker tags have stricter char limits than git branch names
+  branch="fix-issues-4931"
+  pushTag "${branch}-${BUILD_NUM}-${GIT_SHA1_SHORT}"
 else
   echo "Nothing to do. No docker tag defined for branch: $GIT_BRANCH, tag: $GIT_TAG"
 
