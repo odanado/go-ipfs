@@ -6,6 +6,7 @@ on:
     branches:
       - 'master'
       - 'bifrost-*'
+      - 'fix-issues-4931'
     tags:
       - 'v*'
 
