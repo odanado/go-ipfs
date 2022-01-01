@@ -43,8 +43,9 @@ jobs:
       - name: Build wip Docker image
         uses: docker/build-push-action@v2
         with:
-          platforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+          # latforms: linux/amd64,linux/arm/v7,linux/arm64/v8
+          platforms: linux/amd64
           context: .
           push: true
           file: ./Dockerfile
-          tags: ${{ steps.tags.outputs.value }}
+          tags: "${{ steps.tags.outputs.value }}"
