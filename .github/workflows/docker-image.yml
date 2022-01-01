@@ -37,9 +37,9 @@ jobs:
       - name: Get tags
         id: tags
         run: |
-          TAGS=$(./bin/push-docker-tags.sh $(date -u +%F)) > poyo2.txt
-          xxd poyo2.txt
-          echo "::set-output name=value::$(cat poyo2.txt)"
+          TAGS=$(./bin/push-docker-tags.sh $(date -u +%F))
+          TAGS="${TAGS//$'\n'/'%0A'}"
+          echo "::set-output name=value::$(cat $TAGS)"
         shell: bash
 
       - name: Check tags
