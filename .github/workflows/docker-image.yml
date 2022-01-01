@@ -41,7 +41,7 @@ jobs:
         shell: bash
 
       - name: Check tags
-        run: echo "${{ steps.tags.outputs.value }}"
+        run: echo "${{ steps.tags.outputs.value }}" | xxd
 
       - name: Build wip Docker image
         uses: docker/build-push-action@v2
