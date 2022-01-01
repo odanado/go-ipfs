@@ -38,7 +38,6 @@ jobs:
         id: tags
         run: |
           TAGS="$(./bin/push-docker-tags.sh $(date -u +%F))"
-          TAGS="${TAGS//$'\n'/'%0A'}"
           echo "::set-output name=value::$(echo $TAGS)"
         shell: bash
 
