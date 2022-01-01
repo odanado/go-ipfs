@@ -17,6 +17,7 @@ jobs:
     env:
       IMAGE_NAME: odanado/go-ipfs-test
       WIP_IMAGE_TAG: wip
+      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
