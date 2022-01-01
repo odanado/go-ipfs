@@ -37,9 +37,11 @@ jobs:
         id: tags
         run: |
           TAGS=$(./bin/push-docker-tags.sh $(date -u +%F))
-          echo $TAGS
           echo "::set-output name=value::$(echo $TAGS)"
         shell: bash
+
+      - name: Check tags
+        run: echo "${{ steps.tags.outputs.value }}"
 
       - name: Build wip Docker image
         uses: docker/build-push-action@v2
@@ -49,6 +51,4 @@ jobs:
           context: .
           push: true
           file: ./Dockerfile
-          tags: |
-            odanado/go-ipfs-test:fix-issues-4931-2022-01-01-1d0205e
-            odanado/go-ipfs-test:fix-issues-4931-latest
+          tags: "${{ steps.tags.outputs.value }}"
