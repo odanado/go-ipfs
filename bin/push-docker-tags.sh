@@ -46,40 +46,33 @@ DRY_RUN=${5:-false}
 WIP_IMAGE_TAG=${WIP_IMAGE_TAG:-wip}
 IMAGE_NAME=${IMAGE_NAME:-ipfs/go-ipfs}
 
-pushTag () {
+echoImageName () {
   local IMAGE_TAG=$1
-  if [ "$DRY_RUN" != false ]; then
-    echo "DRY RUN! I would have tagged and pushed the following..."
-    echo docker tag "$IMAGE_NAME:$WIP_IMAGE_TAG" "$IMAGE_NAME:$IMAGE_TAG"
-    echo docker push "$IMAGE_NAME:$IMAGE_TAG"
-  else
-    echo "Tagging $IMAGE_NAME:$IMAGE_TAG and pushing to dockerhub"
-    docker tag "$IMAGE_NAME:$WIP_IMAGE_TAG" "$IMAGE_NAME:$IMAGE_TAG"
-    docker push "$IMAGE_NAME:$IMAGE_TAG"
-  fi
+  echo "$IMAGE_NAME:$IMAGE_TAG"
 }
 
 if [[ $GIT_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+-rc ]]; then
-  pushTag "$GIT_TAG"
+  echoImageName "$GIT_TAG"
 
 elif [[ $GIT_TAG =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  pushTag "$GIT_TAG"
-  pushTag "latest"
-  pushTag "release" # see: https://github.com/ipfs/go-ipfs/issues/3999#issuecomment-742228981
+  echoImageName "$GIT_TAG"
+  echoImageName "latest"
+  echoImageName "release" # see: https://github.com/ipfs/go-ipfs/issues/3999#issuecomment-742228981
 
 elif [[ $GIT_BRANCH =~ ^bifrost-.* ]]; then
   # sanitize the branch name since docker tags have stricter char limits than git branch names
   branch=$(echo "$GIT_BRANCH" | tr '/' '-' | tr --delete --complement '[:alnum:]-')
-  pushTag "${branch}-${BUILD_NUM}-${GIT_SHA1_SHORT}"
+  echoImageName "${branch}-${BUILD_NUM}-${GIT_SHA1_SHORT}"
 
 elif [ "$GIT_BRANCH" = "master" ]; then
-  pushTag "master-${BUILD_NUM}-${GIT_SHA1_SHORT}"
-  pushTag "master-latest"
+  echoImageName "master-${BUILD_NUM}-${GIT_SHA1_SHORT}"
+  echoImageName "master-latest"
 
 elif [[ "$GIT_BRANCH" = "fix-issues-4931" ]]; then
   # sanitize the branch name since docker tags have stricter char limits than git branch names
   branch="fix-issues-4931"
-  pushTag "${branch}-${BUILD_NUM}-${GIT_SHA1_SHORT}"
+  echoImageName "${branch}-${BUILD_NUM}-${GIT_SHA1_SHORT}"
+  echoImageName "fix-issues-4931-latest"
 else
   echo "Nothing to do. No docker tag defined for branch: $GIT_BRANCH, tag: $GIT_TAG"
 
