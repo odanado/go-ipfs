@@ -44,12 +44,11 @@ jobs:
       - name: Check tags
         run: echo "${{ steps.tags.outputs.value }}" | xxd
 
+      - name: Check tags
+        run: |
+          ./bin/push-docker-tags.sh $(date -u +%F) > poyopoyo.txt
+          xxd poyopoyo.txt
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        env:
-          TAGS_A: ${{ steps.tags.outputs.value }}
-          TAGS_B: "${{ steps.tags.outputs.value }}"
 
       - name: Build wip Docker image
         uses: docker/build-push-action@v2
